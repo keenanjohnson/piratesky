@@ -5,7 +5,28 @@ import {
   AppBskyEmbedRecord,
   AppBskyFeedDefs,
   AppBskyFeedPost,
+  type ComAtprotoLabelDefs,
 } from '@atproto/api'
+
+// Moderation labels whose media gets hidden behind a click-to-reveal shield,
+// matching the default behavior of official Bluesky clients.
+const SENSITIVE_LABELS = new Set([
+  'porn',
+  'sexual',
+  'nudity',
+  'graphic-media',
+  'gore',
+  '!warn',
+  '!hide',
+])
+
+function isSensitive(
+  ...labelSets: Array<ComAtprotoLabelDefs.Label[] | undefined>
+): boolean {
+  return labelSets.some((labels) =>
+    labels?.some((label) => SENSITIVE_LABELS.has(label.val)),
+  )
+}
 import { agent } from '../agent'
 import { hashStr, pirateTime, toPirateSpeak } from '../pirate'
 import { PirateAvatar } from './PirateAvatar'
@@ -120,6 +141,18 @@ export function Post({ item }: { item: AppBskyFeedDefs.FeedViewPost }) {
   const record = post.record as AppBskyFeedPost.Record
   const seed = hashStr(post.uri)
 
+  const quoted =
+    AppBskyEmbedRecord.isView(post.embed) && AppBskyEmbedRecord.isViewRecord(post.embed.record)
+      ? post.embed.record
+      : undefined
+  const sensitive = isSensitive(
+    post.labels,
+    post.author.labels,
+    quoted?.labels,
+    quoted?.author.labels,
+  )
+  const [revealed, setRevealed] = useState(false)
+
   const [likeUri, setLikeUri] = useState(post.viewer?.like)
   const [likeCount, setLikeCount] = useState(post.likeCount ?? 0)
   const [repostUri, setRepostUri] = useState(post.viewer?.repost)
@@ -192,7 +225,14 @@ export function Post({ item }: { item: AppBskyFeedDefs.FeedViewPost }) {
         <div className="post-content">
           <AuthorLine author={post.author} createdAt={record.createdAt} uri={post.uri} />
           {record.text && <p className="post-text">{toPirateSpeak(record.text, seed)}</p>}
-          {post.embed && <EmbedView embed={post.embed} />}
+          {post.embed &&
+            (sensitive && !revealed ? (
+              <button className="cursed-cargo" onClick={() => setRevealed(true)}>
+                ⚠️ Cursed cargo — click to peek
+              </button>
+            ) : (
+              <EmbedView embed={post.embed} />
+            ))}
           <div className="post-stats">
             <a
               className="stat-btn"
