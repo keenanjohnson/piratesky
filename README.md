@@ -2,6 +2,8 @@
 
 Bluesky, but pirates.
 
+<img width="1301" height="831" alt="image" src="https://github.com/user-attachments/assets/94f10791-a9d6-4d99-9193-c0a4e391a34b" />
+
 An [atproto](https://atproto.com) app view that logs into yer Bluesky account and renders yer timeline entirely in pirate: every post translated to pirate speak, every avatar fitted with a tricorn hat, or bandana all wrapped in a parchment-and-wood theme.
 
 ## Runnin' the ship
