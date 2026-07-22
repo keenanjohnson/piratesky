@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import {
   AppBskyEmbedExternal,
   AppBskyEmbedImages,
@@ -5,6 +6,7 @@ import {
   AppBskyFeedDefs,
   AppBskyFeedPost,
 } from '@atproto/api'
+import { agent } from '../agent'
 import { hashStr, pirateTime, toPirateSpeak } from '../pirate'
 import { PirateAvatar } from './PirateAvatar'
 
@@ -15,12 +17,56 @@ type Author = {
   avatar?: string
 }
 
-function AuthorLine({ author, createdAt }: { author: Author; createdAt?: string }) {
+function profileUrl(author: Author): string {
+  return `https://bsky.app/profile/${author.did}`
+}
+
+function postUrl(author: Author, uri: string): string {
+  const rkey = uri.split('/').pop()
+  return `${profileUrl(author)}/post/${rkey}`
+}
+
+function AuthorLine({
+  author,
+  createdAt,
+  uri,
+}: {
+  author: Author
+  createdAt?: string
+  uri?: string
+}) {
   return (
     <div className="author-line">
-      <span className="author-name">{author.displayName || author.handle}</span>
-      <span className="author-handle">☠ @{author.handle}</span>
-      {createdAt && <span className="post-time">· {pirateTime(createdAt)}</span>}
+      <a
+        className="author-name"
+        href={profileUrl(author)}
+        target="_blank"
+        rel="noreferrer"
+      >
+        {author.displayName || author.handle}
+      </a>
+      <a
+        className="author-handle"
+        href={profileUrl(author)}
+        target="_blank"
+        rel="noreferrer"
+      >
+        ☠ @{author.handle}
+      </a>
+      {createdAt &&
+        (uri ? (
+          <a
+            className="post-time"
+            href={postUrl(author, uri)}
+            target="_blank"
+            rel="noreferrer"
+            title="Spy the full yarn on Bluesky"
+          >
+            · {pirateTime(createdAt)}
+          </a>
+        ) : (
+          <span className="post-time">· {pirateTime(createdAt)}</span>
+        ))}
     </div>
   )
 }
@@ -59,7 +105,7 @@ function EmbedView({ embed }: { embed: unknown }) {
     const value = rec.value as Partial<AppBskyFeedPost.Record>
     return (
       <div className="embed-quote">
-        <AuthorLine author={rec.author} createdAt={value.createdAt} />
+        <AuthorLine author={rec.author} createdAt={value.createdAt} uri={rec.uri} />
         {typeof value.text === 'string' && (
           <p className="post-text">{toPirateSpeak(value.text, hashStr(rec.uri))}</p>
         )}
@@ -73,6 +119,53 @@ export function Post({ item }: { item: AppBskyFeedDefs.FeedViewPost }) {
   const post = item.post
   const record = post.record as AppBskyFeedPost.Record
   const seed = hashStr(post.uri)
+
+  const [likeUri, setLikeUri] = useState(post.viewer?.like)
+  const [likeCount, setLikeCount] = useState(post.likeCount ?? 0)
+  const [repostUri, setRepostUri] = useState(post.viewer?.repost)
+  const [repostCount, setRepostCount] = useState(post.repostCount ?? 0)
+
+  const toggleLike = async () => {
+    if (likeUri) {
+      setLikeUri(undefined)
+      setLikeCount((c) => c - 1)
+      try {
+        await agent.deleteLike(likeUri)
+      } catch {
+        setLikeUri(likeUri)
+        setLikeCount((c) => c + 1)
+      }
+    } else {
+      setLikeCount((c) => c + 1)
+      try {
+        const res = await agent.like(post.uri, post.cid)
+        setLikeUri(res.uri)
+      } catch {
+        setLikeCount((c) => c - 1)
+      }
+    }
+  }
+
+  const toggleRepost = async () => {
+    if (repostUri) {
+      setRepostUri(undefined)
+      setRepostCount((c) => c - 1)
+      try {
+        await agent.deleteRepost(repostUri)
+      } catch {
+        setRepostUri(repostUri)
+        setRepostCount((c) => c + 1)
+      }
+    } else {
+      setRepostCount((c) => c + 1)
+      try {
+        const res = await agent.repost(post.uri, post.cid)
+        setRepostUri(res.uri)
+      } catch {
+        setRepostCount((c) => c - 1)
+      }
+    }
+  }
 
   return (
     <article className="post card">
@@ -89,19 +182,41 @@ export function Post({ item }: { item: AppBskyFeedDefs.FeedViewPost }) {
         </div>
       )}
       <div className="post-body">
-        <PirateAvatar
-          src={post.author.avatar}
-          did={post.author.did}
-          alt={post.author.handle}
-        />
+        <a href={profileUrl(post.author)} target="_blank" rel="noreferrer">
+          <PirateAvatar
+            src={post.author.avatar}
+            did={post.author.did}
+            alt={post.author.handle}
+          />
+        </a>
         <div className="post-content">
-          <AuthorLine author={post.author} createdAt={record.createdAt} />
+          <AuthorLine author={post.author} createdAt={record.createdAt} uri={post.uri} />
           {record.text && <p className="post-text">{toPirateSpeak(record.text, seed)}</p>}
           {post.embed && <EmbedView embed={post.embed} />}
           <div className="post-stats">
-            <span title="Replies">🗨️ {post.replyCount ?? 0} parleys</span>
-            <span title="Reposts">🏴‍☠️ {post.repostCount ?? 0} plunders</span>
-            <span title="Likes">🪙 {post.likeCount ?? 0} doubloons</span>
+            <a
+              className="stat-btn"
+              href={postUrl(post.author, post.uri)}
+              target="_blank"
+              rel="noreferrer"
+              title="Parley (reply on Bluesky)"
+            >
+              🗨️ {post.replyCount ?? 0} parleys
+            </a>
+            <button
+              className={`stat-btn ${repostUri ? 'stat-lit' : ''}`}
+              onClick={() => void toggleRepost()}
+              title={repostUri ? 'Strike yer colors (undo repost)' : 'Plunder (repost)'}
+            >
+              🏴‍☠️ {repostCount} plunders
+            </button>
+            <button
+              className={`stat-btn ${likeUri ? 'stat-lit' : ''}`}
+              onClick={() => void toggleLike()}
+              title={likeUri ? 'Take back yer doubloon (unlike)' : 'Toss a doubloon (like)'}
+            >
+              🪙 {likeCount} doubloons
+            </button>
           </div>
         </div>
       </div>

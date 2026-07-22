@@ -16,10 +16,13 @@ Then open the printed localhost URL and sign in with yer Bluesky handle and an [
 ## What be aboard
 
 - **Login** via `com.atproto.server.createSession` (app password) with session resume
-- **Timeline** from `app.bsky.feed.getTimeline` with a "Hoist More Booty" pagination button
+- **Bluesky-style three-column layout** — left nav (linkin' out to bsky.app fer pages not yet built), center feed with "Yer Fleet" (Following) an' "Uncharted Waters" (Discover) tabs, right rail with search an' "Winds Be Blowin'" trending topics
+- **Composer** — send missives straight from the deck, with an optional "translate to pirate afore it sails" toggle an' live preview
+- **Timeline** from `app.bsky.feed.getTimeline` with infinite scroll, plus a background poll that surfaces a "new missives off the bow" pill (Bluesky-style — yer scroll position ne'er jumps)
+- **Likes an' reposts** — toss a doubloon (like) or plunder (repost) straight from the feed; names, avatars, and timestamps link out to bsky.app
 - **Pirate speak translator** ([src/pirate.ts](src/pirate.ts)) — deterministic per post, so missives don't re-translate on every render; URLs, @mentions, and #hashtags be left untouched
 - **Pirate avatars** — SVG hat/bandana overlays plus a sepia filter
 - **Nautical timestamps** — "3 bells past", "2 sunrises past"
 - Images, external link cards, and quote posts (translated, naturally) be supported
 
-Read-only fer now — ye can spy the seven seas but not yet send missives.
+Ye can post, like, an' repost from the deck; replies, notifications, an' the rest o' the fleet still mean rowin' over to bsky.app.
