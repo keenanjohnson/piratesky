@@ -17,4 +17,4 @@ An [app password](https://bsky.app/settings/app-passwords) fallback hides behind
 
 ### Deployin'
 
-OAuth in production needs [public/client-metadata.json](public/client-metadata.json) served from yer deployed origin: replace every `YOUR-DOMAIN.example` in that file with yer real domain afore ye deploy. The file's own URL becomes yer OAuth client id.
+Every push to `main` deploys to [piratesky.app](https://piratesky.app) via GitHub Pages ([.github/workflows/deploy.yml](.github/workflows/deploy.yml)). OAuth in production be configured by [public/client-metadata.json](public/client-metadata.json) — its deployed URL be the OAuth client id, so it must match the domain exactly.

@@ -1,8 +1,8 @@
 {
-  "client_id": "https://YOUR-DOMAIN.example/client-metadata.json",
+  "client_id": "https://piratesky.app/client-metadata.json",
   "client_name": "PirateSky",
-  "client_uri": "https://YOUR-DOMAIN.example",
-  "redirect_uris": ["https://YOUR-DOMAIN.example/"],
+  "client_uri": "https://piratesky.app",
+  "redirect_uris": ["https://piratesky.app/"],
   "scope": "atproto transition:generic",
   "grant_types": ["authorization_code", "refresh_token"],
   "response_types": ["code"],
