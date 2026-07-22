@@ -2,7 +2,7 @@
 
 Bluesky, but pirates.
 
-An [atproto](https://atproto.com) app view that logs into yer Bluesky account and renders yer timeline entirely in pirate: every post translated to pirate speak, every scallywag given a pirate rank, every avatar fitted with a tricorn hat, bandana, or eyepatch, all wrapped in a parchment-and-wood theme.
+An [atproto](https://atproto.com) app view that logs into yer Bluesky account and renders yer timeline entirely in pirate: every post translated to pirate speak, every scallywag given a pirate rank, every avatar fitted with a tricorn hat, or bandana all wrapped in a parchment-and-wood theme.
 
 ## Runnin' the ship
 
