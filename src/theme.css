@@ -1,0 +1,355 @@
+:root {
+  --wood-dark: #241708;
+  --wood: #3a2a12;
+  --parchment: #f0e2c4;
+  --parchment-dark: #e3d0a8;
+  --ink: #2b1d0e;
+  --ink-faded: #6b543a;
+  --gold: #c9a227;
+  --gold-bright: #e6c14a;
+  --crimson: #8b1a1a;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  color: var(--ink);
+  font-family: 'IM Fell English', Georgia, serif;
+  font-size: 17px;
+  line-height: 1.45;
+  background-color: var(--wood-dark);
+  background-image:
+    repeating-linear-gradient(
+      90deg,
+      rgba(0, 0, 0, 0.25) 0px,
+      rgba(0, 0, 0, 0) 4px,
+      rgba(0, 0, 0, 0) 116px,
+      rgba(0, 0, 0, 0.25) 120px
+    ),
+    linear-gradient(180deg, #2e1e0b 0%, #241708 60%, #1a1005 100%);
+}
+
+.app {
+  max-width: 640px;
+  margin: 0 auto;
+  padding: 1rem;
+}
+
+/* ---- masthead ---- */
+.masthead {
+  text-align: center;
+  padding: 1.5rem 0 1rem;
+}
+
+.masthead h1 {
+  font-family: 'Pirata One', 'IM Fell English', serif;
+  font-size: 4rem;
+  margin: 0;
+  color: var(--gold-bright);
+  text-shadow: 2px 3px 0 #000, 0 0 24px rgba(230, 193, 74, 0.35);
+  letter-spacing: 2px;
+}
+
+.masthead h1::before {
+  content: '🏴‍☠️ ';
+  font-size: 2.5rem;
+  vertical-align: middle;
+}
+
+.tagline {
+  color: var(--parchment-dark);
+  font-style: italic;
+  margin: 0.25rem 0 0.75rem;
+}
+
+/* ---- cards (parchment) ---- */
+.card {
+  background: var(--parchment);
+  background-image: radial-gradient(
+      ellipse at 20% 10%,
+      rgba(255, 255, 255, 0.4),
+      transparent 50%
+    ),
+    radial-gradient(ellipse at 90% 90%, rgba(107, 84, 58, 0.18), transparent 60%);
+  border: 2px solid var(--wood);
+  border-radius: 6px;
+  box-shadow:
+    0 2px 0 var(--gold),
+    0 6px 18px rgba(0, 0, 0, 0.6);
+  padding: 1rem;
+  margin-bottom: 1.1rem;
+}
+
+/* ---- login ---- */
+.login {
+  max-width: 420px;
+  margin: 1rem auto;
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+}
+
+.login h2 {
+  font-family: 'Pirata One', serif;
+  font-size: 2rem;
+  margin: 0;
+  text-align: center;
+  color: var(--crimson);
+}
+
+.login-hint {
+  margin: 0;
+  font-size: 0.95rem;
+  color: var(--ink-faded);
+}
+
+.login label {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  font-weight: bold;
+}
+
+.login input {
+  font-family: inherit;
+  font-size: 1rem;
+  padding: 0.55rem 0.7rem;
+  border: 2px solid var(--wood);
+  border-radius: 4px;
+  background: #fffbef;
+  color: var(--ink);
+}
+
+.login input:focus {
+  outline: 2px solid var(--gold);
+}
+
+.login a {
+  color: var(--crimson);
+}
+
+/* ---- buttons ---- */
+.btn {
+  font-family: 'Pirata One', serif;
+  font-size: 1.25rem;
+  letter-spacing: 1px;
+  color: var(--parchment);
+  background: linear-gradient(180deg, #a02020, var(--crimson));
+  border: 2px solid #5c0f0f;
+  border-radius: 6px;
+  padding: 0.5rem 1.2rem;
+  cursor: pointer;
+  box-shadow: 0 2px 0 #5c0f0f, 0 4px 10px rgba(0, 0, 0, 0.5);
+}
+
+.btn:hover:not(:disabled) {
+  background: linear-gradient(180deg, #b62828, #9c1f1f);
+}
+
+.btn:disabled {
+  opacity: 0.6;
+  cursor: wait;
+}
+
+.btn-small {
+  font-size: 1rem;
+  padding: 0.3rem 0.8rem;
+}
+
+.btn-wide {
+  display: block;
+  width: 100%;
+  margin: 0 0 1.5rem;
+}
+
+/* ---- posts ---- */
+.post {
+  padding: 0.85rem 1rem;
+}
+
+.repost-banner,
+.reply-banner {
+  font-size: 0.9rem;
+  font-style: italic;
+  color: var(--ink-faded);
+  border-bottom: 1px dashed var(--ink-faded);
+  padding-bottom: 0.4rem;
+  margin-bottom: 0.6rem;
+}
+
+.post-body {
+  display: flex;
+  gap: 0.8rem;
+}
+
+.post-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.author-line {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.4rem;
+}
+
+.author-name {
+  font-weight: bold;
+  font-size: 1.05rem;
+  color: var(--crimson);
+}
+
+.author-handle {
+  color: var(--ink-faded);
+  font-size: 0.9rem;
+}
+
+.post-time {
+  color: var(--ink-faded);
+  font-size: 0.85rem;
+  font-style: italic;
+}
+
+.post-text {
+  margin: 0.4rem 0 0.5rem;
+  white-space: pre-wrap;
+  overflow-wrap: break-word;
+}
+
+.post-stats {
+  display: flex;
+  gap: 1.2rem;
+  font-size: 0.85rem;
+  color: var(--ink-faded);
+  border-top: 1px solid var(--parchment-dark);
+  padding-top: 0.45rem;
+  margin-top: 0.3rem;
+}
+
+/* ---- avatars ---- */
+.avatar {
+  position: relative;
+  width: 52px;
+  height: 52px;
+  flex-shrink: 0;
+}
+
+.avatar-img {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  border: 2px solid var(--gold);
+  object-fit: cover;
+  filter: sepia(0.45) contrast(1.05);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.avatar-fallback {
+  background: var(--wood);
+  font-size: 1.6rem;
+  text-align: center;
+  line-height: 48px;
+}
+
+.avatar-hat {
+  position: absolute;
+  top: -16px;
+  left: -6px;
+  width: 64px;
+  pointer-events: none;
+}
+
+/* ---- embeds ---- */
+.embed-images {
+  display: grid;
+  gap: 4px;
+  margin: 0.4rem 0;
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.embed-images.count-1 {
+  grid-template-columns: 1fr;
+}
+
+.embed-images.count-2,
+.embed-images.count-4 {
+  grid-template-columns: 1fr 1fr;
+}
+
+.embed-images.count-3 {
+  grid-template-columns: 1fr 1fr 1fr;
+}
+
+.embed-image {
+  width: 100%;
+  max-height: 340px;
+  object-fit: cover;
+  border: 2px solid var(--wood);
+  border-radius: 6px;
+  filter: sepia(0.35);
+}
+
+.embed-external {
+  display: flex;
+  gap: 0.7rem;
+  margin: 0.4rem 0;
+  padding: 0.6rem;
+  border: 2px solid var(--wood);
+  border-radius: 6px;
+  background: var(--parchment-dark);
+  color: var(--ink);
+  text-decoration: none;
+}
+
+.embed-external img {
+  width: 90px;
+  height: 90px;
+  object-fit: cover;
+  border-radius: 4px;
+  filter: sepia(0.35);
+}
+
+.embed-external p {
+  margin: 0.2rem 0;
+  font-size: 0.9rem;
+  color: var(--ink-faded);
+}
+
+.embed-domain {
+  font-size: 0.8rem;
+  color: var(--ink-faded);
+}
+
+.embed-quote {
+  margin: 0.4rem 0;
+  padding: 0.6rem 0.8rem;
+  border: 2px dashed var(--ink-faded);
+  border-radius: 6px;
+  background: var(--parchment-dark);
+}
+
+/* ---- misc ---- */
+.notice {
+  text-align: center;
+  color: var(--parchment-dark);
+  font-style: italic;
+}
+
+.error {
+  color: var(--crimson);
+  font-weight: bold;
+}
+
+.footer {
+  text-align: center;
+  color: var(--ink-faded);
+  font-size: 0.85rem;
+  padding: 1.5rem 0 2rem;
+}
