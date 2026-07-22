@@ -6,16 +6,28 @@ const focusComposer = () => {
   box?.focus({ preventScroll: true })
 }
 
-export function Nav({ onLogout }: { onLogout: () => void }) {
-  const handle = agent.session?.handle
+export function Nav({
+  aboard,
+  handle,
+  onLogout,
+  onComeAboard,
+}: {
+  aboard: boolean
+  handle?: string
+  onLogout: () => void
+  onComeAboard: () => void
+}) {
+  const profileActor = handle ?? agent.did
   const items: Array<{ icon: string; label: string; href: string }> = [
     { icon: '🧭', label: 'Chart the Seas', href: 'https://bsky.app/search' },
     { icon: '🔔', label: "Crow's Nest", href: 'https://bsky.app/notifications' },
     { icon: '💬', label: 'Parley', href: 'https://bsky.app/messages' },
     { icon: '🗺️', label: 'Trade Routes', href: 'https://bsky.app/feeds' },
     { icon: '📜', label: 'Crew Rosters', href: 'https://bsky.app/lists' },
-    { icon: '🏴‍☠️', label: 'Yer Colors', href: `https://bsky.app/profile/${handle}` },
-    { icon: '⚙️', label: 'The Riggin\'', href: 'https://bsky.app/settings' },
+    ...(aboard && profileActor
+      ? [{ icon: '🏴‍☠️', label: 'Yer Colors', href: `https://bsky.app/profile/${profileActor}` }]
+      : []),
+    { icon: '⚙️', label: "The Riggin'", href: 'https://bsky.app/settings' },
   ]
 
   return (
@@ -39,13 +51,21 @@ export function Nav({ onLogout }: { onLogout: () => void }) {
           <span className="nav-icon">{item.icon}</span> {item.label}
         </a>
       ))}
-      <button className="btn nav-post-btn" onClick={focusComposer}>
-        Send a Missive 📜
-      </button>
-      <button className="nav-link nav-logout" onClick={onLogout}>
-        <span className="nav-icon">🏃</span> Abandon Ship
-      </button>
-      {handle && <div className="nav-handle">☠ @{handle}</div>}
+      {aboard ? (
+        <>
+          <button className="btn nav-post-btn" onClick={focusComposer}>
+            Send a Missive 📜
+          </button>
+          <button className="nav-link nav-logout" onClick={onLogout}>
+            <span className="nav-icon">🏃</span> Abandon Ship
+          </button>
+          {handle && <div className="nav-handle">☠ @{handle}</div>}
+        </>
+      ) : (
+        <button className="btn nav-post-btn" onClick={onComeAboard}>
+          Come Aboard ⛵
+        </button>
+      )}
     </nav>
   )
 }

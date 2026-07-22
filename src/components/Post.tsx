@@ -203,20 +203,33 @@ export function Post({ item }: { item: AppBskyFeedDefs.FeedViewPost }) {
             >
               🗨️ {post.replyCount ?? 0} parleys
             </a>
-            <button
-              className={`stat-btn ${repostUri ? 'stat-lit' : ''}`}
-              onClick={() => void toggleRepost()}
-              title={repostUri ? 'Strike yer colors (undo repost)' : 'Plunder (repost)'}
-            >
-              🏴‍☠️ {repostCount} plunders
-            </button>
-            <button
-              className={`stat-btn ${likeUri ? 'stat-lit' : ''}`}
-              onClick={() => void toggleLike()}
-              title={likeUri ? 'Take back yer doubloon (unlike)' : 'Toss a doubloon (like)'}
-            >
-              🪙 {likeCount} doubloons
-            </button>
+            {agent.did ? (
+              <>
+                <button
+                  className={`stat-btn ${repostUri ? 'stat-lit' : ''}`}
+                  onClick={() => void toggleRepost()}
+                  title={repostUri ? 'Strike yer colors (undo repost)' : 'Plunder (repost)'}
+                >
+                  🏴‍☠️ {repostCount} plunders
+                </button>
+                <button
+                  className={`stat-btn ${likeUri ? 'stat-lit' : ''}`}
+                  onClick={() => void toggleLike()}
+                  title={likeUri ? 'Take back yer doubloon (unlike)' : 'Toss a doubloon (like)'}
+                >
+                  🪙 {likeCount} doubloons
+                </button>
+              </>
+            ) : (
+              <>
+                <span className="stat-btn" title="Come aboard to plunder">
+                  🏴‍☠️ {repostCount} plunders
+                </span>
+                <span className="stat-btn" title="Come aboard to toss doubloons">
+                  🪙 {likeCount} doubloons
+                </span>
+              </>
+            )}
           </div>
         </div>
       </div>

@@ -1,8 +1,5 @@
 import { useEffect, useState, type FormEvent } from 'react'
-import { AtpAgent } from '@atproto/api'
-
-// Trending comes from the public appview; no auth needed.
-const publicAgent = new AtpAgent({ service: 'https://api.bsky.app' })
+import { publicAgent } from '../agent'
 
 type Topic = { topic: string; link: string }
 
