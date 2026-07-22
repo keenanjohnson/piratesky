@@ -1,1 +1,3 @@
 # piratesky
+
+Bluesky, but pirates.
