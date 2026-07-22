@@ -694,6 +694,26 @@ body {
   }
 }
 
+/* ---- moderation shield ---- */
+.cursed-cargo {
+  display: block;
+  width: 100%;
+  margin: 0.4rem 0;
+  padding: 1.4rem 1rem;
+  border: 2px dashed var(--crimson);
+  border-radius: 6px;
+  background: var(--parchment-dark);
+  font-family: inherit;
+  font-size: 1rem;
+  font-style: italic;
+  color: var(--crimson);
+  cursor: pointer;
+}
+
+.cursed-cargo:hover {
+  background: var(--parchment);
+}
+
 /* ---- misc ---- */
 .notice {
   text-align: center;

@@ -24,6 +24,13 @@ function feedKey(item: AppBskyFeedDefs.FeedViewPost): string {
   return item.post.uri + (item.reason ? '-r' : '')
 }
 
+// Accounts labeled !no-unauthenticated asked not to be shown to logged-out
+// viewers; official clients hide them from guests, so we do too.
+function hiddenFromGuests(item: AppBskyFeedDefs.FeedViewPost): boolean {
+  if (agent.did) return false
+  return !!item.post.author.labels?.some((l) => l.val === '!no-unauthenticated')
+}
+
 export function Timeline({ source }: { source: FeedSource }) {
   const [feed, setFeed] = useState<AppBskyFeedDefs.FeedViewPost[]>([])
   const [pending, setPending] = useState<AppBskyFeedDefs.FeedViewPost[]>([])
@@ -46,7 +53,9 @@ export function Timeline({ source }: { source: FeedSource }) {
     setError(null)
     try {
       const data = await fetchPage(source, cursorRef.current)
-      const fresh = data.feed.filter((p) => !seenRef.current.has(feedKey(p)))
+      const fresh = data.feed.filter(
+        (p) => !seenRef.current.has(feedKey(p)) && !hiddenFromGuests(p),
+      )
       fresh.forEach((p) => seenRef.current.add(feedKey(p)))
       setFeed((prev) => [...prev, ...fresh])
       cursorRef.current = data.cursor
@@ -91,7 +100,9 @@ export function Timeline({ source }: { source: FeedSource }) {
     const id = setInterval(async () => {
       try {
         const data = await fetchPage(source)
-        const fresh = data.feed.filter((p) => !seenRef.current.has(feedKey(p)))
+        const fresh = data.feed.filter(
+          (p) => !seenRef.current.has(feedKey(p)) && !hiddenFromGuests(p),
+        )
         if (fresh.length === 0) return
         fresh.forEach((p) => seenRef.current.add(feedKey(p)))
         setPending((prev) => [...fresh, ...prev])
